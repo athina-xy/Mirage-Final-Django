@@ -1,6 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Item
 
 # Create your views here.
 def home(request):
-    return HttpResponse("Mirage Store")
+    items = Item.objects.all().order_by('-created_at')
+    context = {
+        'items': items,
+    }
+    return render(request, 'core/home.html', context)

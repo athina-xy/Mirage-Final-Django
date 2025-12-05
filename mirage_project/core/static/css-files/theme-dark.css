@@ -1,0 +1,104 @@
+/* DARK THEME  */
+
+body.dark-theme {
+    color: #e8e8e8;
+}
+
+/* Only non-home pages get solid dark background */
+body.dark-theme:not([data-page="home"]) {
+    background-color: #000;
+}
+
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+    color: #ffda7a;
+}
+
+body.dark-theme p,
+body.dark-theme li,
+body.dark-theme small,
+body.dark-theme label,
+body.dark-theme span {
+    color: #e8e8e8;
+}
+
+body.dark-theme a {
+    color: #ffda7a;
+}
+body.dark-theme a:hover {
+    color: #ffd35a;
+}
+
+/* Navbar */
+body.dark-theme .navbar {
+    background-color: #111 !important;
+}
+body.dark-theme .nav-link {
+    color: #ccc !important;
+}
+
+/* Active link keeps the gold */
+body.dark-theme .nav-link.active {
+    color: #ffda7a !important;
+    border-bottom: 2px solid #ffda7a;
+}
+
+/* Containers / boxes */
+body.dark-theme .generic-box,
+body.dark-theme .story-container,
+body.dark-theme .team-card,
+body.dark-theme .contact-box,
+body.dark-theme .crystal-box,
+body.dark-theme .activity-box,
+body.dark-theme #task-form,
+body.dark-theme #task-summary {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #b78a28;
+    color: #e8e8e8;
+}
+
+/* Forms */
+body.dark-theme .form-control,
+body.dark-theme .form-select,
+body.dark-theme textarea {
+    background-color: #161616;
+    color: #e8e8e8;
+    border: 1px solid #444;
+}
+body.dark-theme .form-control::placeholder,
+body.dark-theme textarea::placeholder {
+    color: #aaa;
+}
+
+/* Tables */
+body.dark-theme table {
+    color: #e8e8e8;
+}
+body.dark-theme thead th {
+    color: #ffda7a;
+    border-bottom: 1px solid #b78a28;
+}
+body.dark-theme tbody td {
+    border-top: 1px solid #333;
+}
+
+/* Buttons */
+body.dark-theme .btn-warning {
+    background-color: #b78a28;
+    border: none;
+    color: #fff;
+}
+body.dark-theme .btn-warning:hover {
+    background-color: #d9aa34;
+}
+
+/* Characters page cards - dark */
+body.dark-theme .character-card {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #b78a28;
+    color: #e8e8e8;
+}

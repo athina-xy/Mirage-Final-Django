@@ -1,0 +1,128 @@
+/* Light theme  */
+
+body:not(.dark-theme) {
+    color: #222;
+}
+
+/* Only non-home pages get light background */
+body:not(.dark-theme):not([data-page="home"]) {
+    background-color: #f4f4f4;
+}
+
+body:not(.dark-theme) h1,
+body:not(.dark-theme) h2,
+body:not(.dark-theme) h3,
+body:not(.dark-theme) h4,
+body:not(.dark-theme) h5,
+body:not(.dark-theme) h6 {
+    color: #b78a28;
+}
+
+body:not(.dark-theme) p,
+body:not(.dark-theme) li,
+body:not(.dark-theme) small,
+body:not(.dark-theme) label,
+body:not(.dark-theme) span {
+    color: #222;
+}
+
+body:not(.dark-theme) a {
+    color: #b78a28;
+}
+body:not(.dark-theme) a:hover {
+    color: #8f6e1f;
+}
+
+/* Navbar */
+body:not(.dark-theme) .navbar {
+    background-color: #ffffff !important;
+}
+body:not(.dark-theme) .nav-link {
+    color: #333 !important;
+}
+body:not(.dark-theme) .nav-link.active {
+    color: #b78a28 !important;
+    border-bottom: 2px solid #b78a28;
+}
+
+/* Containers / boxes */
+body:not(.dark-theme) .generic-box,
+body:not(.dark-theme) .story-container,
+body:not(.dark-theme) .team-card,
+body:not(.dark-theme) .contact-box,
+body:not(.dark-theme) .crystal-box,
+body:not(.dark-theme) .activity-box,
+body:not(.dark-theme) #task-form,
+body:not(.dark-theme) #task-summary {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #d4b46a;
+    color: #222;
+}
+
+/* Forms */
+body:not(.dark-theme) .form-control,
+body:not(.dark-theme) .form-select,
+body:not(.dark-theme) textarea {
+    background-color: #ffffff;
+    color: #222;
+    border: 1px solid #cfcfcf;
+}
+body:not(.dark-theme) .form-control::placeholder,
+body:not(.dark-theme) textarea::placeholder {
+    color: #777;
+}
+
+/* Tables */
+body:not(.dark-theme) table {
+    color: #222;
+}
+body:not(.dark-theme) thead th {
+    color: #b78a28;
+    border-bottom: 1px solid #d4b46a;
+}
+body:not(.dark-theme) tbody td {
+    border-top: 1px solid #e5e5e5;
+}
+
+/* Buttons */
+body:not(.dark-theme) .btn-warning {
+    background-color: #b78a28;
+    border: none;
+    color: #fff;
+}
+body:not(.dark-theme) .btn-warning:hover {
+    background-color: #d9aa34;
+}
+
+/* Characters page cards - light */
+body:not(.dark-theme) .character-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #d4b46a;
+    color: #222;
+}
+
+/* Pre-Order button  */
+body:not(.dark-theme) .contact-box .btn-outline-light {
+    border-color: #b78a28;
+    color: #b78a28;
+    background-color: transparent;
+}
+
+body:not(.dark-theme) .contact-box .btn-outline-light:hover {
+    background-color: #b78a28;
+    color: #ffffff;
+}
+
+
+/* hero text so it's readable */
+body:not(.dark-theme) .hero p {
+    color: #f5f5f5;
+    text-shadow: 0 0 6px #000000;
+}
+
+/* carousel captions in light theme */
+body:not(.dark-theme) .carousel-caption h5,
+body:not(.dark-theme) .carousel-caption p {
+    color: #f8f8f8;
+    text-shadow: 0 0 6px #000000;
+}

@@ -1,0 +1,16 @@
+{% extends "core/layout.html" %}
+
+{% block title %}Mirage Store – Catalogue{% endblock %}
+{% block body_page %}home{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">Catalogue</h1>
+    <p class="page-subtitle">
+        Browse Mirage DLC maps, weapons, and a touch of magical merch.
+    </p>
+
+    {% if items %}
+    {% else %}
+        <p>No items in the Mirage Store yet. Add some DLC and merch from the admin panel.</p>
+    {% endif %}
+{% endblock %}
