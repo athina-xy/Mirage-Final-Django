@@ -1,0 +1,242 @@
+/* select the hero */
+
+.mirage-hero {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    min-height: 260px;
+    background-image: url("../images/mirage-bg.png");
+    background-size: cover;
+    background-position: center;
+    margin-top: 1rem;
+}
+
+.mirage-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent),
+                linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.7));
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.mirage-hero-inner {
+    padding: 2.5rem 3rem;
+    max-width: 540px;
+}
+
+.mirage-hero-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.mirage-hero-subtitle {
+    font-size: 0.98rem;
+    opacity: 0.9;
+    margin-bottom: 1.4rem;
+}
+
+.mirage-hero-btn {
+    border-radius: 999px;
+    padding-inline: 1.6rem;
+}
+
+/* catalogue layout */
+
+.catalogue-section {
+    margin-top: 2rem;
+}
+
+.catalogue-search {
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+body:not(.dark-theme) .catalogue-search {
+    background: #f8fafc;
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+.catalogue-search input[type="text"] {
+    font-size: 0.95rem;
+}
+
+/* Filters panel */
+
+.filters-panel {
+    background: rgba(15, 23, 42, 0.96);
+    border-radius: 18px;
+    padding: 1.1rem 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+    font-size: 0.9rem;
+}
+
+body:not(.dark-theme) .filters-panel {
+    background: #ffffff;
+    box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
+}
+
+.filter-block + .filter-block {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.filter-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+    opacity: 0.85;
+}
+
+/* Product grid */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.product-card {
+    position: relative;
+    padding: 1rem 1rem 0.9rem;
+    border-radius: 18px;
+    background: radial-gradient(circle at top, rgba(56, 189, 248, 0.22), rgba(15, 23, 42, 0.98));
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+}
+
+body:not(.dark-theme) .product-card {
+    background: linear-gradient(145deg, #ffffff, #e5f0ff);
+    border-color: rgba(148, 163, 184, 0.6);
+    box-shadow: 0 14px 26px rgba(15, 23, 42, 0.18);
+}
+
+.product-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.product-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.product-type {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.badge-pill {
+    border-radius: 999px;
+    padding: 0.15rem 0.7rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.badge-dlc {
+    background: rgba(59, 130, 246, 0.2);
+    color: #bfdbfe;
+}
+
+.badge-merch {
+    background: rgba(34, 197, 94, 0.2);
+    color: #bbf7d0;
+}
+
+.badge-sub {
+    background: rgba(148, 163, 184, 0.25);
+    color: #e5e7eb;
+}
+
+/* Rarity */
+
+.rarity-badge {
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.rarity-common {
+    background: rgba(148, 163, 184, 0.25);
+    color: #e5e7eb;
+}
+
+.rarity-rare {
+    background: rgba(59, 130, 246, 0.35);
+    color: #bfdbfe;
+}
+
+.rarity-legendary {
+    background: rgba(234, 179, 8, 0.3);
+    color: #facc15;
+}
+
+/* Meta, price & button */
+
+.product-meta {
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.product-meta span + span::before {
+    content: "·";
+    margin: 0 0.25rem;
+    opacity: 0.6;
+}
+
+.product-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.6rem;
+}
+
+.product-price {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.product-price small {
+    font-size: 0.7rem;
+    opacity: 0.75;
+}
+
+.btn-buy {
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
+/* Empty state */
+
+.catalogue-empty {
+    padding: 2rem 1rem;
+    border-radius: 16px;
+    border: 1px dashed rgba(148, 163, 184, 0.5);
+    text-align: center;
+    opacity: 0.9;
+}
+
+/* Catalogue (hidden until button pressed) */
+
+.catalogue-hidden {
+    display: none;
+}
