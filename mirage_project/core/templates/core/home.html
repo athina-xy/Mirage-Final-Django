@@ -14,22 +14,22 @@
 
 {% block content %}
 
-    <!-- Cover (hero) -->
+    <!-- Hero(Cover) -->
     <section class="mirage-hero mb-5">
         <div class="mirage-hero-overlay">
             <div class="mirage-hero-inner">
                 <h1 class="mirage-hero-title">Enter the Mirage</h1>
                 <p class="mirage-hero-subtitle">
-                    Unlock more fractured worlds, enchanted weapons, and rare relics.
+                    Unlock fractured maps, enchanted weapons, and rare relics from Aetherstone.
                 </p>
                 <button id="enterStoreBtn" class="btn btn-lg btn-warning mirage-hero-btn">
-                    Shop
+                    Enter the Store
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Catalogue -->
+    <!-- Catalogue-->
     <section id="catalogueSection" class="catalogue-section catalogue-hidden">
 
         <!-- Search bar -->
@@ -209,12 +209,26 @@
                 </div>
             </aside>
 
-            <!-- RIGHT: PRODUCTS -->
+            <!-- Products (right) -->
             <div class="col-lg-9">
                 {% if items %}
                     <div class="product-grid">
                         {% for item in items %}
                             <article class="product-card">
+
+                                <!-- image -->
+                                <div class="product-image-wrapper">
+                                    {% if item.image_url %}
+                                        <img src="{% static item.image_url %}"
+                                             alt="{{ item.label }}"
+                                             class="product-image">
+                                    {% else %}
+                                        <img src="{% static 'images/items/placeholder.png' %}"
+                                             alt="{{ item.label }}"
+                                             class="product-image">
+                                    {% endif %}
+                                </div>
+
                                 <div class="product-card-header">
                                     <h2 class="product-title">{{ item.label }}</h2>
                                     <span class="rarity-badge

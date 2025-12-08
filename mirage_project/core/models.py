@@ -60,10 +60,11 @@ class Item(models.Model):
         default='common'
     )
 
+    # storing a path under static
     image_url = models.CharField(
         max_length=200,
         blank=True,
-        help_text="Path or URL to the item's image"
+        help_text="Path under static/, e.g. 'images/items/emberwreath-longbow.png'"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
