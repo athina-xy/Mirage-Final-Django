@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -48,7 +49,6 @@ class Item(models.Model):
     )
 
     description = models.TextField(blank=True)
-
     price = models.DecimalField(max_digits=7, decimal_places=2)
 
     # Mirage flavour fields
@@ -71,3 +71,23 @@ class Item(models.Model):
 
     def __str__(self):
         return self.label
+
+
+class WishlistItem(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='wishlist_items'
+    )
+    item = models.ForeignKey(
+        Item,
+        on_delete=models.CASCADE,
+        related_name='wishlisted_by'
+    )
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'item')
+
+    def __str__(self):
+        return f"{self.user.username} → {self.item.label}"

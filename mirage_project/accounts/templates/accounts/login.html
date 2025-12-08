@@ -1,0 +1,28 @@
+{% extends "core/layout.html" %}
+
+{% block title %}Login – Mirage Store{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">Login</h1>
+    <p class="page-subtitle">Access your wishlist and dashboard.</p>
+
+    <form method="post" class="auth-form mt-3">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Username</label>
+            <input type="text" name="username" id="id_username" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            <input type="password" name="password" id="id_password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+    <p class="small mt-3">
+        Don’t have an account?
+        <a href="{% url 'register' %}">Create one here.</a>
+    </p>
+</div>
+{% endblock %}

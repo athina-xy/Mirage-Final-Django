@@ -1,0 +1,30 @@
+{% extends "core/layout.html" %}
+
+{% block title %}Dashboard – Mirage Store{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">Welcome, {{ request.user.username }}</h1>
+    <p class="page-subtitle">
+        This is your personal Mirage dashboard. <br> Here you can see items you have added to your "🛒 Cart" and your "♥ Wishlist".
+    </p>
+
+    <h2 class="h5 mt-4">Wishlist items</h2>
+
+    {% if wishlist_items %}
+        <ul class="list-group mt-2">
+            {% for w in wishlist_items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ w.item.label }}</span>
+                    <span class="text-muted small">€{{ w.item.price }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="small mt-2">
+            You haven’t added anything to your wishlist yet.
+            Browse the store and click “Wishlist” to save items here.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

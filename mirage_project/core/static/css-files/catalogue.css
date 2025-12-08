@@ -1,4 +1,5 @@
-/* hero selection */
+/* Hero (landing page) */
+
 .mirage-hero {
     position: relative;
     border-radius: 24px;
@@ -8,6 +9,10 @@
     background-size: cover;
     background-position: center;
     margin-top: 1rem;
+}
+
+.mirage-hero-hidden {
+    display: none;
 }
 
 .mirage-hero-overlay {
@@ -44,7 +49,7 @@
     padding-inline: 1.6rem;
 }
 
-/* Catalogue layout */
+/* === CATALOGUE LAYOUT === */
 
 .catalogue-section {
     margin-top: 2rem;
@@ -66,7 +71,7 @@ body:not(.dark-theme) .catalogue-search {
     font-size: 0.95rem;
 }
 
-/* Filters panel */
+/* Filters panel (left) */
 
 .filters-panel {
     background: rgba(15, 23, 42, 0.96);
@@ -96,7 +101,7 @@ body:not(.dark-theme) .filters-panel {
     opacity: 0.85;
 }
 
-/* Product grid */
+/* Products  */
 
 .product-grid {
     display: grid;
@@ -132,6 +137,8 @@ body:not(.dark-theme) .product-card {
     font-weight: 600;
 }
 
+/* Badges */
+
 .product-type {
     display: flex;
     flex-wrap: wrap;
@@ -163,8 +170,6 @@ body:not(.dark-theme) .product-card {
     color: #e5e7eb;
 }
 
-/* Rarity */
-
 .rarity-badge {
     border-radius: 999px;
     padding: 0.1rem 0.6rem;
@@ -188,7 +193,7 @@ body:not(.dark-theme) .product-card {
     color: #facc15;
 }
 
-/* Meta, price & button */
+/* Meta, price & buttons */
 
 .product-meta {
     margin-top: 0.35rem;
@@ -234,13 +239,13 @@ body:not(.dark-theme) .product-card {
     opacity: 0.9;
 }
 
-/* Catalogue hidden */
+/* Catalogue hidden by default (until "Enter the Store") */
 
 .catalogue-hidden {
     display: none;
 }
 
-/* Product images */
+/* Product images – consistent across devices */
 
 .product-image-wrapper {
     width: 100%;
@@ -250,9 +255,13 @@ body:not(.dark-theme) .product-card {
     background: rgba(15, 23, 42, 0.9);
 }
 
+body:not(.dark-theme) .product-image-wrapper {
+    background: #eef2ff;
+}
+
 .product-image {
     display: block;
     width: 100%;
-    height: 150px;
-    object-fit: cover;
+    height: 170px;       
+    object-fit: contain; 
 }

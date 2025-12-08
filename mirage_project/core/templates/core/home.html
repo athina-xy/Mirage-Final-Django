@@ -1,9 +1,8 @@
 {% extends "core/layout.html" %}
 {% load static %}
 
-{% block title %}Mirage Store – Catalogue{% endblock %}
+{% block title %}Mirage Store{% endblock %}
 {% block body_page %}home{% endblock %}
-
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css-files/catalogue.css' %}">
 {% endblock %}
@@ -39,12 +38,12 @@
                        name="q"
                        value="{{ query }}"
                        class="form-control"
-                       placeholder="Search by name, fragment, or element...">
+                       placeholder="Search by name, reality, or element...">
             </div>
 
             <div class="col-md-6 text-md-end">
-                <button type="submit" class="btn btn-primary me-2">Search</button>
-                <a href="/" class="btn btn-outline-secondary">Reset</a>
+                <button type="submit" class="btn btn-primary me-2">🔍︎Search</button>
+                <a href="/" class="btn btn-outline-secondary">↺Reset</a>
             </div>
         </form>
 
@@ -180,6 +179,8 @@
                                 <input type="number"
                                        step="0.01"
                                        min="0"
+                                       max="9999"
+                                       maxlength="6"
                                        name="min_price"
                                        form="filterForm"
                                        class="form-control form-control-sm"
@@ -190,6 +191,8 @@
                                 <input type="number"
                                        step="0.01"
                                        min="0"
+                                       max="9999"
+                                       maxlength="6"
                                        name="max_price"
                                        form="filterForm"
                                        class="form-control form-control-sm"
@@ -197,15 +200,15 @@
                                        value="{{ max_price }}">
                             </div>
                         </div>
+
+                        <form id="filterForm" method="get" class="mt-3 d-grid">
+                            <input type="hidden" name="q" value="{{ query }}">
+                            <button type="submit" class="btn btn-outline-light btn-sm">
+                                Apply Filters
+                            </button>
+                        </form>
+
                     </div>
-
-                    <form id="filterForm" method="get" class="mt-3 d-grid">
-                        <input type="hidden" name="q" value="{{ query }}">
-                        <button type="submit" class="btn btn-outline-light btn-sm">
-                            Apply Filters
-                        </button>
-                    </form>
-
                 </div>
             </aside>
 
@@ -266,9 +269,31 @@
                                         €{{ item.price }}
                                         <small>EUR</small>
                                     </div>
-                                    <button type="button" class="btn btn-warning btn-buy">
-                                        Add to Cart
-                                    </button>
+
+                                    <div class="d-flex gap-2">
+                                        {% if user.is_authenticated %}
+                                            <form method="post" action="{% url 'toggle_wishlist' item.id %}">
+                                                {% csrf_token %}
+                                                {% if item.id in wishlist_ids %}
+                                                    <button type="submit" class="btn btn-outline-light btn-sm">
+                                                        ♥ Wishlisted
+                                                    </button>
+                                                {% else %}
+                                                    <button type="submit" class="btn btn-outline-light btn-sm">
+                                                        ♡ Wishlist
+                                                    </button>
+                                                {% endif %}
+                                            </form>
+                                        {% else %}
+                                            <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">
+                                                ♡ Wishlist
+                                            </a>
+                                        {% endif %}
+
+                                        <button type="button" class="btn btn-warning btn-sm btn-buy">
+                                            Add 🛒
+                                        </button>
+                                    </div>
                                 </div>
                             </article>
                         {% endfor %}

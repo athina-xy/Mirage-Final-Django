@@ -1,13 +1,11 @@
-/* Light theme  */
+/* Light theme – when the <body> does NOT have class="dark-theme" */
 
 body:not(.dark-theme) {
-    color: #222;
+    background-color: #f3f4f6;  
+    color: #111827;
 }
 
-/* Only non-home pages get light background */
-body:not(.dark-theme):not([data-page="home"]) {
-    background-color: #f4f4f4;
-}
+/* Headings & text */
 
 body:not(.dark-theme) h1,
 body:not(.dark-theme) h2,
@@ -23,106 +21,121 @@ body:not(.dark-theme) li,
 body:not(.dark-theme) small,
 body:not(.dark-theme) label,
 body:not(.dark-theme) span {
-    color: #222;
+    color: #111827;
 }
+
+/* Links */
 
 body:not(.dark-theme) a {
     color: #b78a28;
+    text-decoration: none;
 }
+
 body:not(.dark-theme) a:hover {
     color: #8f6e1f;
+    text-decoration: underline;
 }
 
 /* Navbar */
+
 body:not(.dark-theme) .navbar {
     background-color: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
 }
+
+body:not(.dark-theme) .navbar-brand span,
+body:not(.dark-theme) .navbar-brand small {
+    color: #111827;
+}
+
 body:not(.dark-theme) .nav-link {
-    color: #333 !important;
+    color: #374151 !important;
 }
+
+body:not(.dark-theme) .nav-link:hover {
+    color: #b78a28 !important;
+}
+
 body:not(.dark-theme) .nav-link.active {
     color: #b78a28 !important;
     border-bottom: 2px solid #b78a28;
 }
 
-/* Containers / boxes */
-body:not(.dark-theme) .generic-box,
-body:not(.dark-theme) .story-container,
-body:not(.dark-theme) .team-card,
-body:not(.dark-theme) .contact-box,
-body:not(.dark-theme) .crystal-box,
-body:not(.dark-theme) .activity-box,
-body:not(.dark-theme) #task-form,
-body:not(.dark-theme) #task-summary {
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid #d4b46a;
-    color: #222;
+/* Generic cards & panels (auth, dashboard) */
+
+body:not(.dark-theme) .card,
+body:not(.dark-theme) .auth-form,
+body:not(.dark-theme) .account-box {
+    background-color: #ffffff;
+    border: 1px solid rgba(209, 213, 219, 0.9);
+    color: #111827;
+}
+
+/* List groups */
+
+body:not(.dark-theme) .list-group-item {
+    background-color: #ffffff;
+    color: #111827;
+    border-color: rgba(229, 231, 235, 0.9);
 }
 
 /* Forms */
+
 body:not(.dark-theme) .form-control,
 body:not(.dark-theme) .form-select,
 body:not(.dark-theme) textarea {
     background-color: #ffffff;
-    color: #222;
-    border: 1px solid #cfcfcf;
-}
-body:not(.dark-theme) .form-control::placeholder,
-body:not(.dark-theme) textarea::placeholder {
-    color: #777;
+    color: #111827;
+    border: 1px solid #d1d5db;
 }
 
-/* Tables */
-body:not(.dark-theme) table {
-    color: #222;
-}
-body:not(.dark-theme) thead th {
-    color: #b78a28;
-    border-bottom: 1px solid #d4b46a;
-}
-body:not(.dark-theme) tbody td {
-    border-top: 1px solid #e5e5e5;
+body:not(.dark-theme) .form-control::placeholder,
+body:not(.dark-theme) textarea::placeholder {
+    color: #6b7280;
 }
 
 /* Buttons */
+
 body:not(.dark-theme) .btn-warning {
     background-color: #b78a28;
     border: none;
-    color: #fff;
+    color: #ffffff;
 }
+
 body:not(.dark-theme) .btn-warning:hover {
     background-color: #d9aa34;
 }
 
-/* Characters page cards - light */
-body:not(.dark-theme) .character-card {
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid #d4b46a;
-    color: #222;
-}
-
-/* Pre-Order button  */
-body:not(.dark-theme) .contact-box .btn-outline-light {
+body:not(.dark-theme) .btn-outline-light {
     border-color: #b78a28;
     color: #b78a28;
     background-color: transparent;
 }
 
-body:not(.dark-theme) .contact-box .btn-outline-light:hover {
+body:not(.dark-theme) .btn-outline-light:hover {
     background-color: #b78a28;
     color: #ffffff;
 }
 
+/* Hero text (over image) */
 
-/* hero text so it's readable */
-body:not(.dark-theme) .hero p {
-    color: #f5f5f5;
-    text-shadow: 0 0 6px #000000;
+body:not(.dark-theme) .mirage-hero-title {
+    color: #f9fafb;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
 }
 
-/* carousel captions in light theme */
-body:not(.dark-theme) .carousel-caption h5,
-body:not(.dark-theme) .carousel-caption p {
-    color: #f8f8f8;
-    text-shadow: 0 0 6px #000000;
+body:not(.dark-theme) .mirage-hero-subtitle {
+    color: #e5e7eb;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.75);
+}
+
+/* Page titles / subtitles */
+
+body:not(.dark-theme) .page-title {
+    color: #b78a28;
+}
+
+body:not(.dark-theme) .page-subtitle {
+    color: #4b5563;
+    opacity: 0.95;
 }

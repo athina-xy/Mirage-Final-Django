@@ -1,13 +1,11 @@
-/* DARK THEME  */
+/* Dark theme – used when <body> has class="dark-theme" */
 
 body.dark-theme {
-    color: #e8e8e8;
+    background-color: #050816;   
+    color: #f3f4f6;
 }
 
-/* Only non-home pages get solid dark background */
-body.dark-theme:not([data-page="home"]) {
-    background-color: #000;
-}
+/* Headings & basic text */
 
 body.dark-theme h1,
 body.dark-theme h2,
@@ -26,79 +24,114 @@ body.dark-theme span {
     color: #e8e8e8;
 }
 
+/* Links */
+
 body.dark-theme a {
     color: #ffda7a;
+    text-decoration: none;
 }
+
 body.dark-theme a:hover {
     color: #ffd35a;
+    text-decoration: underline;
 }
 
 /* Navbar */
+
 body.dark-theme .navbar {
-    background-color: #111 !important;
-}
-body.dark-theme .nav-link {
-    color: #ccc !important;
+    background-color: #050816 !important;
 }
 
-/* Active link keeps the gold */
+body.dark-theme .navbar-brand span,
+body.dark-theme .navbar-brand small {
+    color: #f9fafb;
+}
+
+body.dark-theme .nav-link {
+    color: #e5e7eb !important;
+}
+
+body.dark-theme .nav-link:hover {
+    color: #ffda7a !important;
+}
+
 body.dark-theme .nav-link.active {
     color: #ffda7a !important;
     border-bottom: 2px solid #ffda7a;
 }
 
-/* Containers / boxes */
-body.dark-theme .generic-box,
-body.dark-theme .story-container,
-body.dark-theme .team-card,
-body.dark-theme .contact-box,
-body.dark-theme .crystal-box,
-body.dark-theme .activity-box,
-body.dark-theme #task-form,
-body.dark-theme #task-summary {
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid #b78a28;
-    color: #e8e8e8;
+/* Generic cards & panels (auth, dashboard, etc.) */
+
+body.dark-theme .card,
+body.dark-theme .auth-form,
+body.dark-theme .account-box {
+    background-color: #020617;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    color: #e5e7eb;
+}
+
+/* List groups (e.g. wishlist list) */
+
+body.dark-theme .list-group-item {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: rgba(55, 65, 81, 0.8);
 }
 
 /* Forms */
+
 body.dark-theme .form-control,
 body.dark-theme .form-select,
 body.dark-theme textarea {
-    background-color: #161616;
-    color: #e8e8e8;
-    border: 1px solid #444;
-}
-body.dark-theme .form-control::placeholder,
-body.dark-theme textarea::placeholder {
-    color: #aaa;
+    background-color: #020617;
+    color: #e5e7eb;
+    border: 1px solid #4b5563;
 }
 
-/* Tables */
-body.dark-theme table {
-    color: #e8e8e8;
-}
-body.dark-theme thead th {
-    color: #ffda7a;
-    border-bottom: 1px solid #b78a28;
-}
-body.dark-theme tbody td {
-    border-top: 1px solid #333;
+body.dark-theme .form-control::placeholder,
+body.dark-theme textarea::placeholder {
+    color: #9ca3af;
 }
 
 /* Buttons */
+
 body.dark-theme .btn-warning {
     background-color: #b78a28;
     border: none;
-    color: #fff;
+    color: #ffffff;
 }
+
 body.dark-theme .btn-warning:hover {
     background-color: #d9aa34;
 }
 
-/* Characters page cards - dark */
-body.dark-theme .character-card {
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid #b78a28;
-    color: #e8e8e8;
+body.dark-theme .btn-outline-light {
+    border-color: #e5e7eb;
+    color: #e5e7eb;
+}
+
+body.dark-theme .btn-outline-light:hover {
+    background-color: #e5e7eb;
+    color: #020617;
+}
+
+/* Hero text readability on dark theme */
+
+body.dark-theme .mirage-hero-title {
+    color: #fffbeb;
+}
+
+body.dark-theme .mirage-hero-subtitle {
+    color: #e5e7eb;
+}
+
+/* Page titles / subtitles */
+
+body.dark-theme .page-title {
+    color: #ffda7a;
+}
+
+body.dark-theme .page-subtitle {
+    color: #e5e7eb;
+    opacity: 0.85;
 }

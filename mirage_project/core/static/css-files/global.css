@@ -86,3 +86,15 @@ body {
 .mode-text {
     font-size: 0.85rem;
 }
+
+/* Mirage logo shown on all pages */
+.mirage-logo-bar {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.mirage-logo-img {
+    max-height: 80px;
+    width: auto;
+}
