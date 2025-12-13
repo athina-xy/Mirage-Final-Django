@@ -54,6 +54,15 @@
         {% block content %}{% endblock %}
     </main>
 
+    {% with cart_count|default:0 as cc %}
+<a href="{% url 'view_cart' %}" class="floating-cart-btn">
+    🛒
+    {% if cc > 0 %}
+        <span class="floating-cart-badge">{{ cc }}</span>
+    {% endif %}
+</a>
+{% endwith %}
+
     <!-- Footer -->
     {% include "partials/footer.html" %}
 

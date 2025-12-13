@@ -98,3 +98,86 @@ body {
     max-height: 80px;
     width: auto;
 }
+
+
+/* Floating Cart Button */
+.floating-cart-btn {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background: #ffc107;
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.5rem;
+    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.45);
+    z-index: 1050;
+    border: none;
+}
+
+.floating-cart-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.6rem 1.4rem rgba(0, 0, 0, 0.55);
+}
+
+.floating-cart-badge {
+    position: absolute;
+    top: -0.35rem;
+    right: -0.35rem;
+    min-width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 999px;
+    background: #dc3545;
+    color: #fff;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.2rem;
+}
+
+/* Floating Cart Button */
+.floating-cart-btn {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background: #ffc107;
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.5rem;
+    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.45);
+    z-index: 1050;
+    border: none;
+}
+
+.floating-cart-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.6rem 1.4rem rgba(0, 0, 0, 0.55);
+}
+
+.floating-cart-badge {
+    position: absolute;
+    top: -0.35rem;
+    right: -0.35rem;
+    min-width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 999px;
+    background: #dc3545;
+    color: #fff;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.2rem;
+}

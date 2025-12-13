@@ -1,12 +1,13 @@
+from decimal import Decimal
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import UserRegisterForm, UserProfileForm
-from core.models import WishlistItem
+from core.models import WishlistItem, Item
 
-# Create your views here.
 
 def register_view(request):
     if request.method == "POST":
@@ -61,13 +62,42 @@ def profile_view(request):
 
 @login_required
 def dashboard_view(request):
+    # Wishlist items
     wishlist_items = (
         WishlistItem.objects.filter(user=request.user)
         .select_related("item")
-        .order_by("-added_at")
+        .order_by("-created_at")
     )
-    return render(
-        request,
-        "accounts/dashboard.html",
-        {"wishlist_items": wishlist_items},
-    )
+
+    # Cart from session
+    cart_session = request.session.get("cart", {})
+    cart_items = []
+    cart_total = Decimal("0.00")
+    cart_count = 0
+
+    if isinstance(cart_session, dict) and cart_session:
+        item_ids = [int(pk) for pk in cart_session.keys()]
+        items = Item.objects.filter(id__in=item_ids)
+
+        for item in items:
+            quantity = cart_session.get(str(item.id), 0)
+            if quantity <= 0:
+                continue
+            line_total = item.price * quantity
+            cart_total += line_total
+            cart_count += quantity
+            cart_items.append(
+                {
+                    "item": item,
+                    "quantity": quantity,
+                    "line_total": line_total,
+                }
+            )
+
+    context = {
+        "wishlist_items": wishlist_items,
+        "cart_items": cart_items,
+        "cart_total": cart_total,
+        "cart_count": cart_count,   # also used by floating button
+    }
+    return render(request, "accounts/dashboard.html", context)

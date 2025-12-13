@@ -6,9 +6,66 @@
 <div class="container py-4">
     <h1 class="page-title">Welcome, {{ request.user.username }}</h1>
     <p class="page-subtitle">
-        This is your personal Mirage dashboard. <br> Here you can see items you have added to your "🛒 Cart" and your "♥ Wishlist".
+        This is your personal Mirage dashboard. <br>
+        Here you can see items you have added to your "🛒 Cart" and your "♥ Wishlist".
     </p>
 
+    {# cart #}
+    <h2 class="h5 mt-4">Your Cart</h2>
+
+    {% if cart_items %}
+        <div class="table-responsive mt-2 mb-3">
+            <table class="table table-dark table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Reality</th>
+                        <th>Rarity</th>
+                        <th class="text-end">Price (€)</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-end">Line Total (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in cart_items %}
+                    <tr>
+                        <td>{{ row.item.label }}</td>
+                        <td>{{ row.item.reality_fragment|default:"–" }}</td>
+                        <td>{{ row.item.get_rarity_display }}</td>
+                        <td class="text-end">{{ row.item.price }}</td>
+                        <td class="text-center">{{ row.quantity }}</td>
+                        <td class="text-end">{{ row.line_total }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5" class="text-end">Total:</th>
+                        <th class="text-end">€{{ cart_total }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{% url 'view_cart' %}" class="btn btn-outline-light btn-sm">
+                Open full cart
+            </a>
+            <form method="post" action="{% url 'checkout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm">
+                    Proceed to Checkout
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <p class="small mt-2">
+            You haven’t added anything to your cart yet.
+            Browse the store and click “Add 🛒” to start filling it.
+        </p>
+    {% endif %}
+
+    {# wishlist #}
     <h2 class="h5 mt-4">Wishlist items</h2>
 
     {% if wishlist_items %}
@@ -23,7 +80,7 @@
     {% else %}
         <p class="small mt-2">
             You haven’t added anything to your wishlist yet.
-            Browse the store and click “Wishlist” to save items here.
+            Browse the store and click “♥ Wishlist” to save items here.
         </p>
     {% endif %}
 </div>

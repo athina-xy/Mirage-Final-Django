@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from decimal import Decimal
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -18,7 +20,7 @@ class SubCategory(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name='subcategories'
+        related_name="subcategories",
     )
     label = models.CharField(max_length=50)
     url_name = models.SlugField(unique=True)
@@ -28,9 +30,9 @@ class SubCategory(models.Model):
 
 
 RARITY_CHOICES = [
-    ('common', 'Common'),
-    ('rare', 'Rare'),
-    ('legendary', 'Legendary'),
+    ("common", "Common"),
+    ("rare", "Rare"),
+    ("legendary", "Legendary"),
 ]
 
 
@@ -40,15 +42,16 @@ class Item(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
-        related_name='items'
+        related_name="items",
     )
     subcategory = models.ForeignKey(
         SubCategory,
         on_delete=models.PROTECT,
-        related_name='items'
+        related_name="items",
     )
 
     description = models.TextField(blank=True)
+
     price = models.DecimalField(max_digits=7, decimal_places=2)
 
     # Mirage flavour fields
@@ -57,14 +60,14 @@ class Item(models.Model):
     rarity = models.CharField(
         max_length=20,
         choices=RARITY_CHOICES,
-        default='common'
+        default="common",
     )
 
     # storing a path under static
     image_url = models.CharField(
         max_length=200,
         blank=True,
-        help_text="Path under static/, e.g. 'images/items/emberwreath-longbow.png'"
+        help_text="Path under static/, e.g. 'images/items/emberwreath-longbow.png'",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -75,19 +78,68 @@ class Item(models.Model):
 
 class WishlistItem(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
-        related_name='wishlist_items'
+        related_name="wishlist_items",
     )
     item = models.ForeignKey(
         Item,
         on_delete=models.CASCADE,
-        related_name='wishlisted_by'
+        related_name="wishlisted_by",
     )
-    added_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'item')
+        unique_together = ("user", "item")
 
     def __str__(self):
         return f"{self.user.username} → {self.item.label}"
+
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("completed", "Completed"),
+        ("cancelled", "Cancelled"),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="orders",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="completed",
+    )
+    total_price = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        default=Decimal("0.00"),
+    )
+
+    def __str__(self):
+        return f"Order #{self.id} by {self.user.username}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    item = models.ForeignKey(
+        Item,
+        on_delete=models.PROTECT,
+        related_name="order_items",
+    )
+    quantity = models.PositiveIntegerField(default=1)
+    price_at_purchase = models.DecimalField(max_digits=7, decimal_places=2)
+
+    def line_total(self) -> Decimal:
+        return self.price_at_purchase * self.quantity
+
+    def __str__(self):
+        return f"{self.quantity} × {self.item.label} (Order #{self.order_id})"

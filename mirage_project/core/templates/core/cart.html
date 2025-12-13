@@ -1,0 +1,81 @@
+{% extends "core/layout.html" %}
+
+{% block title %}Your Cart – Mirage Store{% endblock %}
+{% block body_page %}cart{% endblock %}
+
+{% block content %}
+    <h1 class="page-title mb-4">Your Cart</h1>
+
+    {% if cart_items %}
+        <div class="table-responsive mb-3">
+            <table class="table table-dark table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Reality</th>
+                        <th>Rarity</th>
+                        <th class="text-end">Price (€)</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-end">Line Total (€)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in cart_items %}
+                    <tr>
+                        <td>{{ row.item.label }}</td>
+                        <td>{{ row.item.reality_fragment|default:"–" }}</td>
+                        <td>{{ row.item.get_rarity_display }}</td>
+                        <td class="text-end">{{ row.item.price }}</td>
+                        <td class="text-center">{{ row.quantity }}</td>
+                        <td class="text-end">{{ row.line_total }}</td>
+                        <td class="text-end">
+                            <form method="post" action="{% url 'remove_from_cart' row.item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    Remove
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5" class="text-end">Total:</th>
+                        <th class="text-end">€{{ cart_total }}</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between flex-wrap gap-2">
+            <form method="post" action="{% url 'clear_cart' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-light">
+                    Clear Cart
+                </button>
+            </form>
+
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">
+                        Place Order
+                    </button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}?next={% url 'view_cart' %}"
+                   class="btn btn-primary">
+                    Login to Checkout
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Your cart is currently empty.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary mt-2">
+            Browse the Mirage Store
+        </a>
+    {% endif %}
+{% endblock %}

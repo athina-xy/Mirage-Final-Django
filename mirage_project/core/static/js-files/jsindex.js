@@ -63,3 +63,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// Change cart button after adding 
+document.addEventListener("DOMContentLoaded", function () {
+    const addButtons = document.querySelectorAll(".btn-buy");
+
+    addButtons.forEach(function (btn) {
+        btn.addEventListener("click", function (event) {
+            const button = event.currentTarget;
+
+            // Change text
+            button.textContent = "Added 🛒";
+
+            // change colour from warning to success
+            if (button.classList.contains("btn-warning")) {
+                button.classList.remove("btn-warning");
+                button.classList.add("btn-success");
+            }
+        });
+    });
+});
