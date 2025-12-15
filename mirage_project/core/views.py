@@ -6,6 +6,24 @@ from django.contrib import messages
 from decimal import Decimal
 
 # Create your views here.
+
+# Cart helpers 
+
+def _get_cart(session):
+    """
+    Return cart dict from session.
+    Structure: {"item_id": quantity, ...}
+    """
+    return session.get("cart", {})
+
+
+def _save_cart(session, cart):
+    session["cart"] = cart
+    session.modified = True
+
+
+# Main catalogue 
+
 def home(request):
     query = request.GET.get('q', '').strip()
     category_slug = request.GET.get('category', '').strip()
@@ -63,14 +81,14 @@ def home(request):
             .values_list("item_id", flat=True)
         )
 
-    # 🔹 NEW: cart count for floating button / header
+    # Cart info so buttons & badge can reflect current state even after reload
     cart = _get_cart(request.session)
-    cart_count = 0
-    for qty in cart.values():
-        try:
-            cart_count += int(qty)
-        except (TypeError, ValueError):
-            continue
+    cart_count = sum(cart.values())
+
+    for item in items:
+        qty = cart.get(str(item.id), 0)
+        item.in_cart = qty > 0      
+        item.cart_qty = qty       
 
     context = {
         'items': items,
@@ -83,10 +101,12 @@ def home(request):
         'min_price': min_price,
         'max_price': max_price,
         'wishlist_ids': wishlist_ids,
-        'cart_count': cart_count,   # 🔹 NEW
+        'cart_count': cart_count,   #for the floating cart button
     }
     return render(request, 'core/home.html', context)
 
+
+#  Wishlist 
 
 @login_required
 def toggle_wishlist(request, item_id):
@@ -104,18 +124,7 @@ def toggle_wishlist(request, item_id):
     return redirect('home')
 
 
-def _get_cart(session):
-    """
-    Return cart dict from session.
-    Structure: {"item_id": quantity, ...}
-    """
-    return session.get("cart", {})
-
-
-def _save_cart(session, cart):
-    session["cart"] = cart
-    session.modified = True
-
+# Cart views 
 
 def add_to_cart(request, item_id):
     """
@@ -124,7 +133,7 @@ def add_to_cart(request, item_id):
     if request.method != "POST":
         return redirect('home')
 
-    # item validation
+    # Validate item
     item = get_object_or_404(Item, pk=item_id)
 
     cart = _get_cart(request.session)
@@ -132,10 +141,14 @@ def add_to_cart(request, item_id):
     cart[key] = cart.get(key, 0) + 1
     _save_cart(request.session, cart)
 
-    # Optionally show a small message
     messages.success(request, f"{item.label} was added to your cart.")
 
-    # Go back to where the user was
+    # If it's an AJAX request,so JS can update UI without reload
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        from django.http import HttpResponse
+        return HttpResponse(status=204)
+
+    # Otherwise normal redirect 
     return redirect(request.META.get("HTTP_REFERER", 'home'))
 
 
@@ -144,12 +157,13 @@ def view_cart(request):
     Show current cart contents.
     """
     cart = _get_cart(request.session)
+    cart_count = sum(cart.values())
 
     if not cart:
         context = {
             "cart_items": [],
             "cart_total": Decimal("0.00"),
-            "cart_count": 0,  # 🔹 NEW
+            "cart_count": cart_count,
         }
         return render(request, "core/cart.html", context)
 
@@ -158,7 +172,6 @@ def view_cart(request):
 
     cart_items = []
     total = Decimal("0.00")
-    cart_count = 0  # 🔹 NEW
 
     for item in items:
         quantity = cart.get(str(item.id), 0)
@@ -166,8 +179,6 @@ def view_cart(request):
             continue
         line_total = item.price * quantity
         total += line_total
-        cart_count += int(quantity)  # 🔹 NEW
-
         cart_items.append(
             {
                 "item": item,
@@ -179,7 +190,7 @@ def view_cart(request):
     context = {
         "cart_items": cart_items,
         "cart_total": total,
-        "cart_count": cart_count,  # 🔹 NEW
+        "cart_count": cart_count,
     }
     return render(request, "core/cart.html", context)
 
@@ -205,6 +216,27 @@ def clear_cart(request):
         return redirect('view_cart')
 
     _save_cart(request.session, {})
+    return redirect('view_cart')
+
+
+def decrement_cart_item(request, item_id):
+    """
+    Decrease quantity of an item by 1.
+    If it reaches 0, remove that item completely.
+    """
+    if request.method != "POST":
+        return redirect('view_cart')
+
+    cart = _get_cart(request.session)
+    key = str(item_id)
+    qty = cart.get(key, 0)
+
+    if qty > 1:
+        cart[key] = qty - 1
+    elif qty == 1:
+        cart.pop(key, None)
+
+    _save_cart(request.session, cart)
     return redirect('view_cart')
 
 

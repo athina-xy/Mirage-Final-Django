@@ -290,15 +290,22 @@
                                             </a>
                                         {% endif %}
 
-                                        <!-- add to cart -->
-                                        <form method="post" action="{% url 'add_to_cart' item.id %}">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-warning btn-sm btn-buy">
-                                                Add 🛒
-                                            </button>
-                                        </form>
+                                            <form method="post"
+                                                action="{% url 'add_to_cart' item.id %}"
+                                                class="add-to-cart-form">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-buy {% if item.in_cart %}btn-success{% else %}btn-warning{% endif %}">
+                                                    {% if item.in_cart %}
+                                                        Added 🛒
+                                                    {% else %}
+                                                        Add 🛒
+                                                    {% endif %}
+                                                </button>
+                                            </form>
                                     </div>
                                 </div>
+
                             </article>
                         {% endfor %}
                     </div>

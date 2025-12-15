@@ -1,4 +1,4 @@
-// Controls the "Enter the Store" hero and logo visibility 
+// Controls the "Enter the Store" hero 
 
 document.addEventListener("DOMContentLoaded", function () {
     const enterBtn = document.getElementById("enterStoreBtn");
@@ -65,21 +65,64 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Change cart button after adding 
-document.addEventListener("DOMContentLoaded", function () {
-    const addButtons = document.querySelectorAll(".btn-buy");
+window.addEventListener("load", function () {
+    const cartForms = document.querySelectorAll(".add-to-cart-form");
 
-    addButtons.forEach(function (btn) {
-        btn.addEventListener("click", function (event) {
-            const button = event.currentTarget;
+    cartForms.forEach(function (form) {
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();  
 
-            // Change text
-            button.textContent = "Added 🛒";
+            const button = form.querySelector(".btn-buy");
+            if (!button) return;
 
-            // change colour from warning to success
-            if (button.classList.contains("btn-warning")) {
-                button.classList.remove("btn-warning");
-                button.classList.add("btn-success");
+            // If this button has already added its item, do nothing
+            if (button.dataset.inCart === "true") {
+                return;
             }
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                credentials: "same-origin"
+            })
+                .then(function () {
+                    // Change text + colour
+                    button.textContent = "Added 🛒";
+                    if (button.classList.contains("btn-warning")) {
+                        button.classList.remove("btn-warning");
+                        button.classList.add("btn-success");
+                    }
+
+                    // Mark as in cart & disable 
+                    button.dataset.inCart = "true";
+                    button.disabled = true;
+
+                    // cart badge
+                    const cartBtn = document.querySelector(".floating-cart-btn");
+                    if (cartBtn) {
+                        let badge = cartBtn.querySelector(".floating-cart-badge");
+
+                        if (!badge) {
+                            // create the badge element
+                            badge = document.createElement("span");
+                            badge.className = "floating-cart-badge";
+                            badge.textContent = "1";
+                            cartBtn.appendChild(badge);
+                        } else {
+                            // Increment the existing count
+                            const current = parseInt(badge.textContent || "0", 10) || 0;
+                            badge.textContent = current + 1;
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Error adding to cart:", error);
+                });
         });
     });
 });

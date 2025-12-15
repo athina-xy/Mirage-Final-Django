@@ -27,13 +27,43 @@
                         <td>{{ row.item.reality_fragment|default:"–" }}</td>
                         <td>{{ row.item.get_rarity_display }}</td>
                         <td class="text-end">{{ row.item.price }}</td>
-                        <td class="text-center">{{ row.quantity }}</td>
+
+                        <td class="text-center">
+                            <div class="d-inline-flex align-items-center gap-1">
+                                <form method="post"
+                                    action="{% url 'decrement_cart_item' row.item.id %}"
+                                    class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-light"
+                                            title="Remove one">
+                                        −
+                                    </button>
+                                </form>
+
+                                <span class="mx-2">
+                                    {{ row.quantity }}
+                                </span>
+
+                                <form method="post"
+                                    action="{% url 'add_to_cart' row.item.id %}"
+                                    class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-light"
+                                            title="Add one more">
+                                        +
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+
                         <td class="text-end">{{ row.line_total }}</td>
                         <td class="text-end">
                             <form method="post" action="{% url 'remove_from_cart' row.item.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm btn-outline-danger">
-                                    Remove
+                                    🗑️ Remove
                                 </button>
                             </form>
                         </td>
