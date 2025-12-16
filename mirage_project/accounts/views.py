@@ -1,12 +1,13 @@
 from decimal import Decimal
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import UserRegisterForm, UserProfileForm
-from core.models import WishlistItem, Item, Order
+from core.models import WishlistItem, Item, Order, OrderItem
+from core.views import _get_cart
 
 
 def register_view(request):
@@ -69,44 +70,54 @@ def dashboard_view(request):
         .order_by("-created_at")
     )
 
-    # Cart from session
-    cart = request.session.get("cart", {})
+    # Cart summary
+    cart = _get_cart(request.session)
+    item_ids = [int(k) for k in cart.keys()]
+    items = Item.objects.filter(id__in=item_ids)
+
     cart_items = []
-    cart_total = Decimal("0.00")
+    cart_total = 0
+    for item in items:
+        qty = cart.get(str(item.id), 0)
+        if qty <= 0:
+            continue
+        line_total = item.price * qty
+        cart_total += line_total
+        cart_items.append(
+            {
+                "item": item,
+                "quantity": qty,
+                "line_total": line_total,
+            }
+        )
 
-    if cart:
-        item_ids = [int(pk) for pk in cart.keys()]
-        items = Item.objects.filter(id__in=item_ids)
-
-        for item in items:
-            qty = cart.get(str(item.id), 0)
-            if qty <= 0:
-                continue
-
-            line_total = item.price * qty
-            cart_total += line_total
-
-            cart_items.append(
-                {
-                    "item": item,
-                    "quantity": qty,
-                    "line_total": line_total,
-                }
-            )
-    # Recent 5 orders 
+    # Recent orders
     orders = (
         Order.objects.filter(user=request.user)
         .order_by("-created_at")[:5]
     )
 
-    return render(
-        request,
-        "accounts/dashboard.html",
-        {
-            "wishlist_items": wishlist_items,
-            "cart_items": cart_items,
-            "cart_total": cart_total,
-            "orders": orders,
-        },
-    )
+    context = {
+        "wishlist_items": wishlist_items,
+        "cart_items": cart_items,
+        "cart_total": cart_total,
+        "orders": orders,
+    }
+    return render(request, "accounts/dashboard.html", context)
 
+@login_required
+def order_detail_view(request, order_id):
+    """
+    Show details of a single order belonging to the logged-in user.
+    """
+    # Make sure the order belongs to this user
+    order = get_object_or_404(Order, pk=order_id, user=request.user)
+
+    # Load its items
+    order_items = OrderItem.objects.filter(order=order).select_related("item")
+
+    context = {
+        "order": order,
+        "order_items": order_items,
+    }
+    return render(request, "accounts/order_detail.html", context)

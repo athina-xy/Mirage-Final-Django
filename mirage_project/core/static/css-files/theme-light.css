@@ -139,3 +139,68 @@ body:not(.dark-theme) .page-subtitle {
     color: #4b5563;
     opacity: 0.95;
 }
+
+body:not(.dark-theme) .text-muted,
+body:not(.dark-theme) .text-secondary,
+body:not(.dark-theme) .text-body-secondary,
+body:not(.dark-theme) .text-black-50 {
+    color: rgba(55, 65, 81, 0.78) !important;
+}
+
+body:not(.dark-theme) .text-body-tertiary {
+    color: rgba(55, 65, 81, 0.62) !important;
+}
+
+/* cart table light mode */
+
+body:not(.dark-theme) .table {
+    color: #111827;
+    --bs-table-bg: #ffffff;
+    --bs-table-striped-bg: rgba(17, 24, 39, 0.04);
+    --bs-table-hover-bg: rgba(183, 138, 40, 0.08);
+    border-color: rgba(209, 213, 219, 0.9);
+}
+
+body:not(.dark-theme) .table thead th {
+    color: #7a5a12;
+    border-bottom-color: rgba(209, 213, 219, 0.9);
+}
+
+body:not(.dark-theme) .table td,
+body:not(.dark-theme) .table th {
+    border-color: rgba(209, 213, 219, 0.8);
+}
+
+/* Fix table content visibility in light theme */
+
+body:not(.dark-theme) .table {
+    /* Bootstrap uses CSS vars for table text */
+    --bs-table-color: #111827;
+    --bs-table-striped-color: #111827;
+    --bs-table-hover-color: #111827;
+}
+
+/* Force all table text to be visible on white backgrounds */
+body:not(.dark-theme) .table,
+body:not(.dark-theme) .table td,
+body:not(.dark-theme) .table th,
+body:not(.dark-theme) .table a,
+body:not(.dark-theme) .table span,
+body:not(.dark-theme) .table small {
+    color: #111827 !important;
+    opacity: 1 !important;
+}
+
+/* If any row wrapper was dimmed somewhere, undo it */
+body:not(.dark-theme) .table tbody,
+body:not(.dark-theme) .table tbody tr {
+    opacity: 1 !important;
+}
+
+body:not(.dark-theme) .table .text-muted,
+body:not(.dark-theme) .table .text-secondary,
+body:not(.dark-theme) .table .text-body-secondary,
+body:not(.dark-theme) .table .text-body-tertiary {
+    color: rgba(55, 65, 81, 0.75) !important;
+    opacity: 1 !important;
+}

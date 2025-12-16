@@ -1,0 +1,68 @@
+{% extends "core/layout.html" %}
+
+{% block title %}Order #{{ order.id }} – Mirage Store{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">Order #{{ order.id }}</h1>
+
+    <p class="text-muted small">
+        Placed on {{ order.created_at|date:"Y-m-d H:i" }}
+    </p>
+
+    <p>
+        Status:
+        <span class="badge bg-info text-dark">{{ order.status|title }}</span>
+    </p>
+
+    <p>
+        Total:
+        <strong>€{{ order.total_price }}</strong>
+    </p>
+
+    <h2 class="h5 mt-4">Items in this order</h2>
+
+    {% if order_items %}
+        <div class="table-responsive mt-2">
+            <table class="table table-dark table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Reality</th>
+                        <th>Rarity</th>
+                        <th class="text-end">Price at purchase (€)</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-end">Line total (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in order_items %}
+                    <tr>
+                        <td>{{ row.item.label }}</td>
+                        <td>{{ row.item.reality_fragment|default:"–" }}</td>
+                        <td>{{ row.item.get_rarity_display }}</td>
+                        <td class="text-end">{{ row.price_at_purchase }}</td>
+                        <td class="text-center">{{ row.quantity }}</td>
+                        <td class="text-end">{{ row.line_total }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5" class="text-end">Order total:</th>
+                        <th class="text-end">€{{ order.total_price }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    {% else %}
+        <p class="small mt-2">
+            This order has no items (this normally should not happen).
+        </p>
+    {% endif %}
+
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-light mt-3">
+        ← Back to your dashboard
+    </a>
+</div>
+{% endblock %}

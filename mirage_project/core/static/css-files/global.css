@@ -1,4 +1,3 @@
-/* ===== GLOBAL BASE STYLES (NEUTRAL) ===== */
 
 /* Box sizing */
 *,
@@ -7,13 +6,22 @@
     box-sizing: border-box;
 }
 
-/* Body: no colors here, themes control them */
+/* Global fonts*/
 body {
-    margin: 0;
-    font-family: "Poppins", Arial, sans-serif;
+    font-family: "Cormorant Garamond", system-ui, -apple-system,
+                 BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Generic box used in various pages (colors come from themes) */
+/* font headings  */
+.mirage-hero-title,
+.navbar-brand,
+.page-title {
+    font-family: "Cinzel", serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Generic box used in various pages */
 .generic-box {
     border-radius: 10px;
     padding: 20px;
@@ -180,4 +188,30 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0 0.2rem;
+}
+
+
+html {
+    font-size: 16px;
+}
+
+body {
+    /* slightly larger  */
+    font-size: 1.03rem;
+    line-height: 1.6;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Make small text readable  */
+.small,
+small {
+    font-size: 0.92rem;
+}
+
+.mirage-hero-title,
+.navbar-brand,
+.page-title {
+    font-family: "Cinzel Decorative", "Cinzel", serif;
 }

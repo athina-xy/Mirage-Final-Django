@@ -135,3 +135,56 @@ body.dark-theme .page-subtitle {
     color: #e5e7eb;
     opacity: 0.85;
 }
+
+/* Fix unreadable small text in dark mode */
+
+body.dark-theme .text-muted,
+body.dark-theme .text-secondary,
+body.dark-theme .text-body-secondary,
+body.dark-theme .text-black-50 {
+    color: rgba(229, 231, 235, 0.78) !important;
+}
+
+body.dark-theme .text-body-tertiary {
+    color: rgba(229, 231, 235, 0.62) !important;
+}
+
+/* Catalogue card descriptions  */
+body.dark-theme .product-card .text-muted,
+body.dark-theme .product-card p.text-muted,
+body.dark-theme .product-card small.text-muted {
+    color: rgba(229, 231, 235, 0.82) !important;
+}
+
+
+body.dark-theme .product-price small,
+body.dark-theme .order-meta small,
+body.dark-theme .wishlist-price,
+body.dark-theme .wishlist-item small {
+    opacity: 0.95;
+}
+
+/* cart table in dark mode */
+
+body.dark-theme .table {
+    color: #e5e7eb;
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(148, 163, 184, 0.08);
+    --bs-table-hover-bg: rgba(255, 218, 122, 0.10);
+    border-color: rgba(148, 163, 184, 0.25);
+}
+
+body.dark-theme .table thead th {
+    color: #ffda7a;
+    border-bottom-color: rgba(148, 163, 184, 0.35);
+}
+
+body.dark-theme .table td,
+body.dark-theme .table th {
+    border-color: rgba(148, 163, 184, 0.22);
+}
+
+/* If you use Bootstrap .table-light anywhere, keep it dark-friendly */
+body.dark-theme .table-light {
+    --bs-table-bg: transparent;
+}
