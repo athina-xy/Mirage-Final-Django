@@ -204,3 +204,64 @@ body:not(.dark-theme) .table .text-body-tertiary {
     color: rgba(55, 65, 81, 0.75) !important;
     opacity: 1 !important;
 }
+
+/* Cart table styling (light) */
+
+body:not(.dark-theme) .table-responsive {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(209, 213, 219, 0.95);
+    box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
+}
+
+/* Override the dark table class in light mode */
+body:not(.dark-theme) table.table.table-dark {
+    background: #ffffff !important;
+    --bs-table-bg: #ffffff;
+    --bs-table-color: #111827;
+    --bs-table-border-color: rgba(209, 213, 219, 0.85);
+    --bs-table-striped-bg: rgba(17, 24, 39, 0.04);
+    --bs-table-hover-bg: rgba(183, 138, 40, 0.08);
+}
+
+/* Header */
+body:not(.dark-theme) table.table thead th {
+    color: #7a5a12 !important;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    background: rgba(248, 250, 252, 1);
+}
+
+/* Cell spacing */
+body:not(.dark-theme) table.table td,
+body:not(.dark-theme) table.table th {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+}
+
+/* Force all text visible inside the cart table */
+body:not(.dark-theme) table.table,
+body:not(.dark-theme) table.table td,
+body:not(.dark-theme) table.table th,
+body:not(.dark-theme) table.table span {
+    color: #111827 !important;
+    opacity: 1 !important;
+}
+
+/* Qty controls */
+body:not(.dark-theme) table.table .btn-outline-light {
+    border-color: rgba(183, 138, 40, 0.55) !important;
+    color: #7a5a12 !important;
+}
+
+body:not(.dark-theme) table.table .btn-outline-light:hover {
+    background: rgba(183, 138, 40, 0.10) !important;
+}
+
+/* Totals row */
+body:not(.dark-theme) table.table tfoot th {
+    background: rgba(248, 250, 252, 1);
+    color: #111827 !important;
+}

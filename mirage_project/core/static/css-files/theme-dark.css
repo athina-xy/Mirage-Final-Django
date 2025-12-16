@@ -188,3 +188,52 @@ body.dark-theme .table th {
 body.dark-theme .table-light {
     --bs-table-bg: transparent;
 }
+
+/* Cart table styling (dark mode)*/
+
+body.dark-theme .table-responsive {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+}
+
+body.dark-theme table.table {
+    background: rgba(15, 23, 42, 0.88) !important;
+    --bs-table-bg: rgba(15, 23, 42, 0.88);
+    --bs-table-color: #e5e7eb;
+    --bs-table-border-color: rgba(148, 163, 184, 0.22);
+    --bs-table-striped-bg: rgba(148, 163, 184, 0.08);
+    --bs-table-hover-bg: rgba(255, 218, 122, 0.10);
+}
+
+body.dark-theme table.table thead th {
+    color: #ffda7a !important;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    background: rgba(2, 6, 23, 0.55);
+}
+
+body.dark-theme table.table td,
+body.dark-theme table.table th {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+}
+
+/* Qty controls: make them match Mirage style */
+body.dark-theme table.table .btn-outline-light {
+    border-color: rgba(255, 218, 122, 0.55) !important;
+    color: #ffda7a !important;
+}
+
+body.dark-theme table.table .btn-outline-light:hover {
+    background: rgba(255, 218, 122, 0.18) !important;
+}
+
+/* Keep totals crisp */
+body.dark-theme table.table tfoot th {
+    background: rgba(2, 6, 23, 0.45);
+    color: #e5e7eb !important;
+}
