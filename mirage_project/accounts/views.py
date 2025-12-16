@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import UserRegisterForm, UserProfileForm
-from core.models import WishlistItem, Item
+from core.models import WishlistItem, Item, Order
 
 
 def register_view(request):
@@ -62,7 +62,7 @@ def profile_view(request):
 
 @login_required
 def dashboard_view(request):
-    # Wishlist items
+    # Wishlist items 
     wishlist_items = (
         WishlistItem.objects.filter(user=request.user)
         .select_related("item")
@@ -70,34 +70,43 @@ def dashboard_view(request):
     )
 
     # Cart from session
-    cart_session = request.session.get("cart", {})
+    cart = request.session.get("cart", {})
     cart_items = []
     cart_total = Decimal("0.00")
-    cart_count = 0
 
-    if isinstance(cart_session, dict) and cart_session:
-        item_ids = [int(pk) for pk in cart_session.keys()]
+    if cart:
+        item_ids = [int(pk) for pk in cart.keys()]
         items = Item.objects.filter(id__in=item_ids)
 
         for item in items:
-            quantity = cart_session.get(str(item.id), 0)
-            if quantity <= 0:
+            qty = cart.get(str(item.id), 0)
+            if qty <= 0:
                 continue
-            line_total = item.price * quantity
+
+            line_total = item.price * qty
             cart_total += line_total
-            cart_count += quantity
+
             cart_items.append(
                 {
                     "item": item,
-                    "quantity": quantity,
+                    "quantity": qty,
                     "line_total": line_total,
                 }
             )
+    # Recent 5 orders 
+    orders = (
+        Order.objects.filter(user=request.user)
+        .order_by("-created_at")[:5]
+    )
 
-    context = {
-        "wishlist_items": wishlist_items,
-        "cart_items": cart_items,
-        "cart_total": cart_total,
-        "cart_count": cart_count,   # also used by floating button
-    }
-    return render(request, "accounts/dashboard.html", context)
+    return render(
+        request,
+        "accounts/dashboard.html",
+        {
+            "wishlist_items": wishlist_items,
+            "cart_items": cart_items,
+            "cart_total": cart_total,
+            "orders": orders,
+        },
+    )
+
