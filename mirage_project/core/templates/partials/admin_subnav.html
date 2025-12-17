@@ -1,21 +1,18 @@
-<div class="admin-subnav">
-  <div class="container d-flex flex-wrap gap-3 py-2">
-    <a href="{% url 'admin_items_list' %}">Manage Products</a>
-    <a href="{% url 'admin_item_create' %}">Add Product</a>
+{% if user.is_authenticated and user.is_staff %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-black border-top border-secondary">
+    <div class="container-fluid">
 
-    {# Owner-only links: check group names by looping (template-safe) #}
-    {% if request.user.is_superuser %}
-      <a href="{% url 'admin_categories_list' %}">Manage Categories</a>
-      <a href="{% url 'admin_category_create' %}">Add Category</a>
-      <a href="{% url 'admin_users_list' %}">Manage Employees</a>
-    {% else %}
-      {% for g in request.user.groups.all %}
-        {% if g.name == "Owner" %}
-          <a href="{% url 'admin_categories_list' %}">Manage Categories</a>
-          <a href="{% url 'admin_category_create' %}">Add Category</a>
-          <a href="{% url 'admin_users_list' %}">Manage Employees</a>
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-  </div>
-</div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="adminNav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_panel' %}"> ⚙️ Admin Panel</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endif %}

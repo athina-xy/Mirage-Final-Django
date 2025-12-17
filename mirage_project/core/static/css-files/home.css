@@ -1,0 +1,41 @@
+/* --- Featured Drops (Home) --- */
+
+/* make the section feel tighter */
+.featured-drops {
+  margin-top: 0.75rem;
+}
+
+/* keep cards compact */
+.featured-drops .card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* force images to a consistent small height */
+.featured-drops .card-img-top {
+  height: 140px;        /* adjust: 120–160 is nice */
+  object-fit: contain;  /* keep full item visible */
+  background: rgba(15, 23, 42, 0.10);
+}
+
+/* smaller title + spacing */
+.featured-drops .card-body {
+  padding: 0.75rem 0.85rem;
+}
+
+.featured-drops .card-body h3 {
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+}
+
+/* keep description short and consistent */
+.featured-drops .card-body p {
+  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+/* price + button alignment */
+.featured-drops .card-body strong {
+  font-size: 0.95rem;
+}

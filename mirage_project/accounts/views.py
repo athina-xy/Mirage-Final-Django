@@ -17,7 +17,7 @@ def register_view(request):
             user = form.save()
             login(request, user)
             messages.success(request, "Account created. You are now logged in.")
-            return redirect("dashboard")
+            return redirect("home")
     else:
         form = UserRegisterForm()
 
@@ -33,7 +33,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, f"Welcome back, {user.username}!")
-            return redirect("dashboard")
+            return redirect("home")
         else:
             messages.error(request, "Invalid username or password.")
 
@@ -63,14 +63,12 @@ def profile_view(request):
 
 @login_required
 def dashboard_view(request):
-    # Wishlist items 
     wishlist_items = (
         WishlistItem.objects.filter(user=request.user)
         .select_related("item")
         .order_by("-created_at")
     )
 
-    # Cart summary
     cart = _get_cart(request.session)
     item_ids = [int(k) for k in cart.keys()]
     items = Item.objects.filter(id__in=item_ids)
@@ -91,7 +89,6 @@ def dashboard_view(request):
             }
         )
 
-    # Recent orders
     orders = (
         Order.objects.filter(user=request.user)
         .order_by("-created_at")[:5]
@@ -105,15 +102,10 @@ def dashboard_view(request):
     }
     return render(request, "accounts/dashboard.html", context)
 
+
 @login_required
 def order_detail_view(request, order_id):
-    """
-    Show details of a single order belonging to the logged-in user.
-    """
-    # Make sure the order belongs to this user
     order = get_object_or_404(Order, pk=order_id, user=request.user)
-
-    # Load its items
     order_items = OrderItem.objects.filter(order=order).select_related("item")
 
     context = {

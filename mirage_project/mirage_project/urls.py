@@ -21,6 +21,7 @@ urlpatterns = [
     path("cart/clear/", core_views.clear_cart, name="clear_cart"),
     path("cart/checkout/", core_views.checkout, name="checkout"),
 
-    # Home page
+    # Pages
+    path("catalogue/", core_views.catalogue, name="catalogue"),
     path("", core_views.home, name="home"),
 ]

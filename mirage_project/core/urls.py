@@ -16,5 +16,4 @@ urlpatterns = [
 
     path("manage/users/", views.admin_users_list, name="admin_users_list"),
     path("manage/users/<int:user_id>/edit/", views.admin_user_edit, name="admin_user_edit"),
-    path("manage/users/<int:user_id>/delete/", views.admin_user_delete, name="admin_user_delete"),
 ]

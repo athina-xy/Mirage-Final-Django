@@ -49,7 +49,7 @@
     padding-inline: 1.6rem;
 }
 
-/* === CATALOGUE LAYOUT === */
+/* catalogue layout */
 
 .catalogue-section {
     margin-top: 2rem;
@@ -242,7 +242,7 @@ body:not(.dark-theme) .product-card {
 /* Catalogue hidden by default (until "Enter the Store") */
 
 .catalogue-hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Product images – consistent across devices */

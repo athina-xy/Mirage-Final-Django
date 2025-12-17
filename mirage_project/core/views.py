@@ -12,8 +12,6 @@ from django.contrib.auth.models import User
 from .forms_admin import ItemAdminForm, CategoryAdminForm, UserSiteAdminForm
 
 
-# Create your views here.
-
 # Cart helpers
 
 def _get_cart(session):
@@ -29,9 +27,31 @@ def _save_cart(session, cart):
     session.modified = True
 
 
-# Main catalogue
+
+# Public pages
+
 
 def home(request):
+    """
+    Landing page (hero + info). No catalogue here.
+    """
+    cart = _get_cart(request.session)
+    cart_count = sum(cart.values())
+
+    featured_items = Item.objects.all().order_by("-created_at")[:6]
+
+    context = {
+        "cart_count": cart_count,
+        "featured_items": featured_items,
+    }
+    return render(request, "core/home.html", context)
+
+
+def catalogue(request):
+    """
+    Store catalogue page (filters + items grid).
+    This is basically your old home() catalogue logic.
+    """
     query = request.GET.get('q', '').strip()
     category_slug = request.GET.get('category', '').strip()
     subcategory_slug = request.GET.get('subcategory', '').strip()
@@ -64,7 +84,6 @@ def home(request):
 
     # Price range
     if min_price:
-        # ignore long input
         if len(min_price) <= 6:
             try:
                 items = items.filter(price__gte=float(min_price))
@@ -108,9 +127,10 @@ def home(request):
         'min_price': min_price,
         'max_price': max_price,
         'wishlist_ids': wishlist_ids,
-        'cart_count': cart_count,   # for the floating cart button
+        'cart_count': cart_count,
     }
-    return render(request, 'core/home.html', context)
+    return render(request, 'core/catalogue.html', context)
+
 
 
 # Wishlist
@@ -128,7 +148,7 @@ def toggle_wishlist(request, item_id):
         WishlistItem.objects.create(user=request.user, item=item)
         messages.success(request, f"{item.label} added to your wishlist.")
 
-    return redirect('home')
+    return redirect(request.META.get("HTTP_REFERER", "catalogue"))
 
 
 # Cart views
@@ -138,7 +158,7 @@ def add_to_cart(request, item_id):
     Add one unit of the given item to the cart.
     """
     if request.method != "POST":
-        return redirect('home')
+        return redirect('catalogue')
 
     # Validate item
     item = get_object_or_404(Item, pk=item_id)
@@ -155,8 +175,7 @@ def add_to_cart(request, item_id):
         from django.http import HttpResponse
         return HttpResponse(status=204)
 
-    # Otherwise normal redirect
-    return redirect(request.META.get("HTTP_REFERER", 'home'))
+    return redirect(request.META.get("HTTP_REFERER", 'catalogue'))
 
 
 def view_cart(request):
@@ -258,7 +277,6 @@ def checkout(request):
         return redirect('view_cart')
 
     if request.method != "POST":
-        # Only allow POST to actually create orders
         return redirect('view_cart')
 
     item_ids = [int(k) for k in cart.keys()]
@@ -293,14 +311,12 @@ def checkout(request):
     order.total_price = total
     order.save()
 
-    # Clear cart after successful checkout
     _save_cart(request.session, {})
 
     return render(request, "core/checkout_success.html", {"order": order})
 
 
-# different roles 
-
+# Roles
 
 def role_required(*roles):
     """
@@ -313,11 +329,9 @@ def role_required(*roles):
         def _wrapped(request, *args, **kwargs):
             user = request.user
 
-            # Superuser can do everything
             if user.is_superuser:
                 return view_func(request, *args, **kwargs)
 
-            # must be staff for management pages
             if not user.is_staff:
                 return HttpResponseForbidden("Admins only.")
 
@@ -370,12 +384,12 @@ def admin_item_delete(request, item_id):
 
 
 # categories 
-@role_required("Owner" , "Employee")
+@role_required("Owner")
 def admin_categories_list(request):
     categories = Category.objects.all().order_by("id")
     return render(request, "admin/categories_list.html", {"categories": categories})
 
-@role_required("Owner", "Employee")
+@role_required("Owner")
 def admin_category_create(request):
     form = CategoryAdminForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -383,7 +397,7 @@ def admin_category_create(request):
         return redirect("admin_categories_list")
     return render(request, "admin/category_form.html", {"form": form, "mode": "create"})
 
-@role_required("Owner",  "Employee")
+@role_required("Owner")
 def admin_category_edit(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     form = CategoryAdminForm(request.POST or None, instance=category)
@@ -392,7 +406,7 @@ def admin_category_edit(request, category_id):
         return redirect("admin_categories_list")
     return render(request, "admin/category_form.html", {"form": form, "mode": "edit", "obj": category})
 
-@role_required("Owner", "Employee")
+@role_required("Owner")
 def admin_category_delete(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     if request.method == "POST":
@@ -401,7 +415,7 @@ def admin_category_delete(request, category_id):
     return render(request, "admin/confirm_delete.html", {"object": category, "type": "Category"})
 
 
-# users/employees (Owner only)
+# users/employees 
 @role_required("Owner")
 def admin_users_list(request):
     users = User.objects.all().order_by("id")
@@ -415,23 +429,3 @@ def admin_user_edit(request, user_id):
         form.save()
         return redirect("admin_users_list")
     return render(request, "admin/user_form.html", {"form": form, "u": u})
-
-@role_required("Owner")
-def admin_user_delete(request, user_id):
-    u = get_object_or_404(User, id=user_id)
-
-    # Safety rules
-    if u.is_superuser:
-        return HttpResponseForbidden("You cannot delete a superuser.")
-    if u.id == request.user.id:
-        messages.error(request, "You cannot delete your own account.")
-        return redirect("admin_users_list")
-
-    if request.method == "POST":
-        username = u.username
-        u.delete()
-        messages.success(request, f"User '{username}' was deleted.")
-        return redirect("admin_users_list")
-
-    return render(request, "admin/user_confirm_delete.html", {"u": u})
-
