@@ -63,11 +63,17 @@ def catalogue(request):
 
     # Search
     if query:
+        # hard cap to prevent huge inputs
+        if len(query) > 60:
+            query = query[:60]
+
         items = items.filter(
             Q(label__icontains=query) |
             Q(description__icontains=query) |
             Q(element__icontains=query) |
-            Q(reality_fragment__icontains=query)
+            Q(reality_fragment__icontains=query) |
+            Q(category__label__icontains=query) |
+            Q(subcategory__label__icontains=query)
         )
 
     # Category filter
@@ -429,6 +435,7 @@ def admin_user_edit(request, user_id):
         form.save()
         return redirect("admin_users_list")
     return render(request, "admin/user_form.html", {"form": form, "u": u})
+
 @role_required("Owner")
 def admin_user_delete(request, user_id):
     u = get_object_or_404(User, id=user_id)
