@@ -260,9 +260,14 @@
                                 <form method="post" action="{% url 'add_to_cart' item.id %}" class="add-to-cart-form">
                                     {% csrf_token %}
                                     <button type="submit"
-                                            class="btn btn-sm btn-buy {% if item.in_cart %}btn-success{% else %}btn-warning{% endif %}">
-                                        {% if item.in_cart %}Added 🛒{% else %}Add 🛒{% endif %}
-                                    </button>
+                                        class="btn btn-sm btn-buy {% if item.in_cart %}btn-success{% else %}btn-warning{% endif %}"
+                                        {% if item.in_cart %}disabled aria-disabled="true" title="Already in cart — manage quantity from your cart"{% endif %}>
+                                            {% if item.in_cart %}
+                                                In cart 🛒
+                                            {% else %}
+                                                Add 🛒
+                                    {% endif %}
+                                </button>
                                 </form>
                             </div>
                         </div>

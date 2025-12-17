@@ -429,3 +429,23 @@ def admin_user_edit(request, user_id):
         form.save()
         return redirect("admin_users_list")
     return render(request, "admin/user_form.html", {"form": form, "u": u})
+@role_required("Owner")
+def admin_user_delete(request, user_id):
+    u = get_object_or_404(User, id=user_id)
+
+    # never allow deleting superusers or yourself
+    if u.is_superuser or u.id == request.user.id:
+        messages.error(request, "You cannot delete this user.")
+        return redirect("admin_users_list")
+
+    if request.method == "POST":
+        username = u.username
+        u.delete()
+        messages.success(request, f"User '{username}' was deleted.")
+        return redirect("admin_users_list")
+
+    return render(request, "admin/user_confirm_delete.html", {
+        "u": u,
+        "object": u,      
+        "type": "User",   
+    })
