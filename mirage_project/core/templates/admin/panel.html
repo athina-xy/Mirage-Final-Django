@@ -1,0 +1,36 @@
+{% extends "core/layout.html" %}
+{% block title %}Admin Panel – Mirage Store{% endblock %}
+{% block content %}
+
+<h1 class="page-title mb-3">Admin Panel</h1>
+<p class="text-muted">Welcome, {{ request.user.username }}. Choose what to manage.</p>
+
+<div class="row g-3 mt-2">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5 class="mb-1">Products</h5>
+      <p class="text-muted mb-2">Create, edit, and delete catalogue items.</p>
+      <a class="btn btn-primary" href="{% url 'admin_items_list' %}">Manage Products</a>
+    </div>
+  </div>
+
+  {% if request.user.is_superuser %}
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5 class="mb-1">Categories</h5>
+      <p class="text-muted mb-2">Manage categories for filtering.</p>
+      <a class="btn btn-primary" href="{% url 'admin_categories_list' %}">Manage Categories</a>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5 class="mb-1">Employees</h5>
+      <p class="text-muted mb-2">Enable/disable staff and manage user access.</p>
+      <a class="btn btn-primary" href="{% url 'admin_users_list' %}">Manage Employees</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

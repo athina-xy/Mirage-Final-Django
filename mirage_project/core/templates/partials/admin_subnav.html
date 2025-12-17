@@ -1,0 +1,21 @@
+<div class="admin-subnav">
+  <div class="container d-flex flex-wrap gap-3 py-2">
+    <a href="{% url 'admin_items_list' %}">Manage Products</a>
+    <a href="{% url 'admin_item_create' %}">Add Product</a>
+
+    {# Owner-only links: check group names by looping (template-safe) #}
+    {% if request.user.is_superuser %}
+      <a href="{% url 'admin_categories_list' %}">Manage Categories</a>
+      <a href="{% url 'admin_category_create' %}">Add Category</a>
+      <a href="{% url 'admin_users_list' %}">Manage Employees</a>
+    {% else %}
+      {% for g in request.user.groups.all %}
+        {% if g.name == "Owner" %}
+          <a href="{% url 'admin_categories_list' %}">Manage Categories</a>
+          <a href="{% url 'admin_category_create' %}">Add Category</a>
+          <a href="{% url 'admin_users_list' %}">Manage Employees</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>

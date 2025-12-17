@@ -37,8 +37,14 @@
 
 <body data-page="{% block body_page %}home{% endblock %}">
 
-    <!-- Navbar -->
-    {% include "partials/navbar.html" %}
+    <!-- Navbars -->
+        {% include "partials/navbar.html" %}
+        {% if user.is_authenticated and user.is_staff %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_panel' %}"> ⚙️ Admin Panel</a>
+        </li>
+        {% endif %}
+
 
     <!-- Theme switch -->
     <div class="theme-toggle-container text-end pe-3 mt-2">

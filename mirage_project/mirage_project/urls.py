@@ -8,6 +8,7 @@ urlpatterns = [
 
     # Accounts app
     path("accounts/", include("accounts.urls")),
+    path("", include("core.urls")),
 
     # Wishlist toggle
     path("wishlist/toggle/<int:item_id>/", core_views.toggle_wishlist, name="toggle_wishlist"),

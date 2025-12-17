@@ -1,0 +1,46 @@
+{% extends "core/layout.html" %}
+{% block title %}Manage Products – Mirage Store{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="page-title mb-0">Manage Products</h1>
+  <a href="{% url 'admin_item_create' %}" class="btn btn-success">+ Add Product</a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Label</th>
+        <th>Category</th>
+        <th>Subcategory</th>
+        <th class="text-end">Price (€)</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.label }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.subcategory|default:"—" }}</td>
+        <td class="text-end">{{ item.price }}</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'admin_item_edit' item.id %}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'admin_item_delete' item.id %}">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="text-center text-muted py-4">No items found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<a href="{% url 'admin_panel' %}" class="btn btn-outline-secondary mt-2">← Back to Admin Panel</a>
+
+{% endblock %}

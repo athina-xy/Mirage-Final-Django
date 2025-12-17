@@ -5,9 +5,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from decimal import Decimal
 
+# imports for roles + admin management
+from functools import wraps
+from django.http import HttpResponseForbidden
+from django.contrib.auth.models import User
+from .forms_admin import ItemAdminForm, CategoryAdminForm, UserSiteAdminForm
+
+
 # Create your views here.
 
-# Cart helpers 
+# Cart helpers
 
 def _get_cart(session):
     """
@@ -22,7 +29,7 @@ def _save_cart(session, cart):
     session.modified = True
 
 
-# Main catalogue 
+# Main catalogue
 
 def home(request):
     query = request.GET.get('q', '').strip()
@@ -87,8 +94,8 @@ def home(request):
 
     for item in items:
         qty = cart.get(str(item.id), 0)
-        item.in_cart = qty > 0      
-        item.cart_qty = qty       
+        item.in_cart = qty > 0
+        item.cart_qty = qty
 
     context = {
         'items': items,
@@ -101,12 +108,12 @@ def home(request):
         'min_price': min_price,
         'max_price': max_price,
         'wishlist_ids': wishlist_ids,
-        'cart_count': cart_count,   #for the floating cart button
+        'cart_count': cart_count,   # for the floating cart button
     }
     return render(request, 'core/home.html', context)
 
 
-#  Wishlist 
+# Wishlist
 
 @login_required
 def toggle_wishlist(request, item_id):
@@ -124,7 +131,7 @@ def toggle_wishlist(request, item_id):
     return redirect('home')
 
 
-# Cart views 
+# Cart views
 
 def add_to_cart(request, item_id):
     """
@@ -143,12 +150,12 @@ def add_to_cart(request, item_id):
 
     messages.success(request, f"{item.label} was added to your cart.")
 
-    # If it's an AJAX request,so JS can update UI without reload
+    # If it's an AJAX request, so JS can update UI without reload
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         from django.http import HttpResponse
         return HttpResponse(status=204)
 
-    # Otherwise normal redirect 
+    # Otherwise normal redirect
     return redirect(request.META.get("HTTP_REFERER", 'home'))
 
 
@@ -290,3 +297,141 @@ def checkout(request):
     _save_cart(request.session, {})
 
     return render(request, "core/checkout_success.html", {"order": order})
+
+
+# different roles 
+
+
+def role_required(*roles):
+    """
+    @role_required("Owner") -> only Owner (and superuser)
+    @role_required("Owner", "Employee") -> Owner + Employee (and superuser)
+    """
+    def decorator(view_func):
+        @wraps(view_func)
+        @login_required
+        def _wrapped(request, *args, **kwargs):
+            user = request.user
+
+            # Superuser can do everything
+            if user.is_superuser:
+                return view_func(request, *args, **kwargs)
+
+            # must be staff for management pages
+            if not user.is_staff:
+                return HttpResponseForbidden("Admins only.")
+
+            user_roles = set(user.groups.values_list("name", flat=True))
+            if any(r in user_roles for r in roles):
+                return view_func(request, *args, **kwargs)
+
+            return HttpResponseForbidden("Insufficient role.")
+        return _wrapped
+    return decorator
+
+
+# Site management views (Owner/Employee)
+
+@role_required("Owner", "Employee")
+def admin_panel(request):
+    return render(request, "admin/panel.html")
+
+
+# items (Owner + Employee)
+@role_required("Owner", "Employee")
+def admin_items_list(request):
+    items = Item.objects.all().order_by("id")
+    return render(request, "admin/items_list.html", {"items": items})
+
+@role_required("Owner", "Employee")
+def admin_item_create(request):
+    form = ItemAdminForm(request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("admin_items_list")
+    return render(request, "admin/item_form.html", {"form": form, "mode": "create"})
+
+@role_required("Owner", "Employee")
+def admin_item_edit(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    form = ItemAdminForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("admin_items_list")
+    return render(request, "admin/item_form.html", {"form": form, "mode": "edit", "obj": item})
+
+@role_required("Owner", "Employee")
+def admin_item_delete(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    if request.method == "POST":
+        item.delete()
+        return redirect("admin_items_list")
+    return render(request, "admin/confirm_delete.html", {"object": item, "type": "Item"})
+
+
+# categories 
+@role_required("Owner" , "Employee")
+def admin_categories_list(request):
+    categories = Category.objects.all().order_by("id")
+    return render(request, "admin/categories_list.html", {"categories": categories})
+
+@role_required("Owner", "Employee")
+def admin_category_create(request):
+    form = CategoryAdminForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("admin_categories_list")
+    return render(request, "admin/category_form.html", {"form": form, "mode": "create"})
+
+@role_required("Owner",  "Employee")
+def admin_category_edit(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    form = CategoryAdminForm(request.POST or None, instance=category)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("admin_categories_list")
+    return render(request, "admin/category_form.html", {"form": form, "mode": "edit", "obj": category})
+
+@role_required("Owner", "Employee")
+def admin_category_delete(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    if request.method == "POST":
+        category.delete()
+        return redirect("admin_categories_list")
+    return render(request, "admin/confirm_delete.html", {"object": category, "type": "Category"})
+
+
+# users/employees (Owner only)
+@role_required("Owner")
+def admin_users_list(request):
+    users = User.objects.all().order_by("id")
+    return render(request, "admin/users_list.html", {"users": users})
+
+@role_required("Owner")
+def admin_user_edit(request, user_id):
+    u = get_object_or_404(User, id=user_id)
+    form = UserSiteAdminForm(request.POST or None, instance=u)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("admin_users_list")
+    return render(request, "admin/user_form.html", {"form": form, "u": u})
+
+@role_required("Owner")
+def admin_user_delete(request, user_id):
+    u = get_object_or_404(User, id=user_id)
+
+    # Safety rules
+    if u.is_superuser:
+        return HttpResponseForbidden("You cannot delete a superuser.")
+    if u.id == request.user.id:
+        messages.error(request, "You cannot delete your own account.")
+        return redirect("admin_users_list")
+
+    if request.method == "POST":
+        username = u.username
+        u.delete()
+        messages.success(request, f"User '{username}' was deleted.")
+        return redirect("admin_users_list")
+
+    return render(request, "admin/user_confirm_delete.html", {"u": u})
+

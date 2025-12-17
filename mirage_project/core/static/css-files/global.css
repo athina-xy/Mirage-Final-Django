@@ -250,3 +250,46 @@ button, .btn, input, select, textarea, .table {
     transform: translateY(-1px);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
 }
+
+/*  Admin subnav toolbar (for staff) */
+
+.admin-subnav {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.28);
+    background: rgba(2, 6, 23, 0.55);
+    backdrop-filter: blur(10px);
+}
+
+body:not(.dark-theme) .admin-subnav {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom-color: rgba(209, 213, 219, 0.95);
+}
+
+.admin-subnav a {
+    text-decoration: none;
+    font-size: 0.92rem;
+    opacity: 0.9;
+}
+
+body.dark-theme .admin-subnav a { color: #e5e7eb; }
+body:not(.dark-theme) .admin-subnav a { color: #111827; }
+
+.admin-subnav a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* Admin panel readability in both themes */
+.table {
+  background: transparent;
+}
+
+body.dark-theme .table,
+body.dark-theme .table th,
+body.dark-theme .table td {
+  color: #e5e7eb;
+}
+
+body:not(.dark-theme) .table th,
+body:not(.dark-theme) .table td {
+  color: #111827;
+}

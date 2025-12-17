@@ -1,0 +1,19 @@
+{% extends "core/layout.html" %}
+{% block title %}Delete User – Mirage Store{% endblock %}
+{% block content %}
+
+<h1 class="page-title">Delete User</h1>
+
+<div class="alert alert-warning">
+  You are about to delete:
+  <strong>{{ u.username }}</strong>
+  {% if u.email %} ({{ u.email }}){% endif %}
+</div>
+
+<form method="post" class="d-flex gap-2">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Yes, delete</button>
+  <a href="{% url 'admin_users_list' %}" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+{% endblock %}
